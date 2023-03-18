@@ -1,0 +1,56 @@
+name: Generate fabrication files
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  generate:
+    name: Generate fabrication files
+    runs-on: ubuntu-22.04
+    
+    steps:
+      - name: Check out code from GitHub
+        uses: actions/checkout@v3
+        with:
+          path: QuokkADB-CE
+      
+      - name: Install dependencies
+        run: |
+          sudo add-apt-repository --yes ppa:kicad/kicad-7.0-releases
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends kicad python3 wget
+          sudo apt-get install gsettings-backend libcairo2 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk2.0-0 libdxflib3
+          sudo pip3 install git+https://github.com/yaqwsx/KiKit.git
+          git clone https://github.com/openscopeproject/InteractiveHtmlBom.git
+          mkdir -p QuokkADB-CE/images
+
+
+      - name: Install gerbv
+        run: |
+          git clone https://github.com/gerbv/gerbv.github.io.git
+          cd gerbv.github.io/ci/
+          tar xvzf gerbv*Ubuntu*.tar.gz
+          sudo cp gerbv /usr/local/bin
+          sudo cp libgerbv.so.1.0.* /usr/local/lib
+          sudo ldconfig
+
+      
+      - name: Generate fabrication files
+        run: |
+          export PATH=`pwd`/InteractiveHtmlBom/InteractiveHtmlBom:$PATH
+          export INTERACTIVE_HTML_BOM_NO_DISPLAY=1
+          cd QuokkADB-CE
+          ./kikit_run.sh
+      
+      - name: Upload JLCPCB gerbers
+        uses: actions/upload-artifact@v3
+        with:
+          path: QuokkADB-CE/gerbers/jlcpcb.zip
+          name: QuokkADB-CE gerbers for JLCPCB
+
+      - name: Upload images
+        uses: actions/upload-artifact@v3
+        with:
+          path: QuokkADB-CE/images/*
+          name: Images of the PCB
+

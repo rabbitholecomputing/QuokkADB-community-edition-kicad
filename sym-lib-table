@@ -1,0 +1,6 @@
+(sym_lib_table
+  (lib (name "MCU_RaspberryPi_and_Boards")(type "KiCad")(uri "${KIPRJMOD}/kicad_libs/RP-Pico Libraries/MCU_RaspberryPi_and_Boards.kicad_sym")(options "")(descr ""))
+  (lib (name "MCP23009-E_MG")(type "Legacy")(uri "${KIPRJMOD}/kicad_libs/MCP23009-E_MG.lib")(options "")(descr ""))
+  (lib (name "usb2adb-rescue")(type "Legacy")(uri "${KIPRJMOD}/kicad_libs/usb2adb-rescue.lib")(options "")(descr ""))
+  (lib (name "Usb2Adb")(type "KiCad")(uri "${KIPRJMOD}/kicad_libs/Usb2Adb.kicad_sym")(options "")(descr ""))
+)
